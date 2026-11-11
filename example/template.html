@@ -1,0 +1,588 @@
+<title>تركيب صندوق الإلكترونيّات</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script>document.documentElement.lang = "ar"; document.documentElement.dir = "rtl";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600&display=swap">
+<style>
+/* A workshop sheet: steps down one column, a sticky 3D bench beside them showing the unit after
+   each step. Orange always means "the part you fit now". Frame: lid up, the USB-C slot toward you. */
+:root {
+  --paper: #eef1ef;
+  --surface: #ffffff;
+  --ink: #17211e;
+  --muted: #5a6864;
+  --line: #d3dbd8;
+  --accent: #dd5524;
+  --accent-soft: #fbe6dc;
+  --steel: #2f5f8e;
+  --warn: #9a5a00;
+  --warn-soft: #fbf0d9;
+  --ok: #2c6e48;
+  --ok-soft: #e1f0e6;
+  --bench: #e3e8e6;
+  --part: #f4f5f2;
+  --metal: #8e989d;
+  --brass: #b58a2e;
+  --cell: #5d7fa6;
+  --bank: #3d454b;
+  --pcb: #2f6b4f;
+  --pcb2: #2b4f7a;
+  --cable: #23282b;
+  --rope: #4f6584;
+  --grip: #2c2c2c;
+  --glue: #e6dcb6;
+  --edge: #3c4744;
+  --f-display: "Readex Pro", "IBM Plex Sans Arabic", Tahoma, sans-serif;
+  --f-body: "IBM Plex Sans Arabic", Tahoma, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1513; --surface: #161e1b; --ink: #e3eae7; --muted: #95a39f; --line: #2a3532;
+    --accent: #f06a39; --accent-soft: #3a2116; --steel: #6b9bd0; --warn: #e3a64a; --warn-soft: #2e2512;
+    --ok: #6cc08e; --ok-soft: #13271b;
+    --bench: #1b2421; --part: #c9cfcc; --metal: #8b969b; --brass: #c79a3c; --cell: #6d8fb6; --bank: #565f66;
+    --pcb: #3f8a65; --pcb2: #3f6fa8; --cable: #0d0f10; --rope: #6f86a8; --grip: #1a1a1a; --glue: #d8cfa8; --edge: #121816;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1513; --surface: #161e1b; --ink: #e3eae7; --muted: #95a39f; --line: #2a3532;
+  --accent: #f06a39; --accent-soft: #3a2116; --steel: #6b9bd0; --warn: #e3a64a; --warn-soft: #2e2512;
+  --ok: #6cc08e; --ok-soft: #13271b;
+  --bench: #1b2421; --part: #c9cfcc; --metal: #8b969b; --brass: #c79a3c; --cell: #6d8fb6; --bank: #565f66;
+  --pcb: #3f8a65; --pcb2: #3f6fa8; --cable: #0d0f10; --rope: #6f86a8; --grip: #1a1a1a; --glue: #d8cfa8; --edge: #121816;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { direction: rtl; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.35; margin: 0; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.45rem); font-weight: 600; }
+h2 { font-size: 1.35rem; font-weight: 600; }
+h3 { font-size: 1.08rem; font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--f-mono); font-size: .9em; direction: ltr; unicode-bidi: isolate; }
+.wrap { max-width: 1240px; margin: 0 auto; }
+a { color: var(--steel); }
+
+header.top { padding-block: 28px 18px; display: grid; gap: 10px; }
+.kicker { color: var(--muted); font-size: .9rem; letter-spacing: .02em; }
+.lede { max-width: 70ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 12px; font-size: .88rem; }
+.chip.new { border-color: var(--accent); color: var(--accent); }
+.here { max-width: 70ch; background: var(--accent-soft); border-inline-start: 3px solid var(--accent); border-radius: 6px; padding: 8px 12px; }
+.here a { color: inherit; font-weight: 600; }
+
+section.block { padding-block: 26px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+.cols3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.cols3 > div { min-width: 0; display: grid; gap: 6px; align-content: start; }
+ul.plain { margin: 0; padding-inline-start: 1.1em; }
+ul.plain li { margin-block: 2px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: start; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: .85rem; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* steps + bench */
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 28px; align-items: start; }
+.steps { display: grid; gap: 14px; padding-block: 8px 40vh; min-width: 0; }
+.stage { font-family: var(--f-display); font-weight: 600; color: var(--muted); font-size: .95rem; padding-top: 10px; display: flex; gap: 8px; align-items: baseline; }
+.stage::after { content: ""; flex: 1; border-top: 1px dashed var(--line); }
+.bench {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); height: min(78vh, 720px);
+  background: var(--bench); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; min-width: 0;
+}
+.bench canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.bench .hud { position: absolute; inset: 0; pointer-events: none; }
+.bench .title {
+  position: absolute; top: 10px; right: 12px; left: 12px; display: flex; gap: 10px; align-items: baseline;
+  font-family: var(--f-display); font-weight: 600; font-size: 1rem;
+}
+.bench .title .n { color: var(--accent); font-variant-numeric: tabular-nums; }
+.bench .legend { position: absolute; top: 40px; right: 12px; font-size: .8rem; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.sw { width: 12px; height: 12px; border-radius: 3px; background: var(--accent); display: inline-block; }
+.bench .controls {
+  position: absolute; bottom: 10px; right: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; pointer-events: auto;
+}
+.btn {
+  font: inherit; font-size: .88rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 8px; padding: 4px 12px; cursor: pointer;
+}
+.btn:hover { border-color: var(--ink); }
+.btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.btn:focus-visible, .step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tag {
+  position: absolute; transform: translate(-50%, -100%); white-space: nowrap; font-size: .78rem; line-height: 1.3;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--accent); border-radius: 6px; padding: 2px 7px;
+  margin-top: -8px;
+}
+.tag::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--accent); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: .9rem; padding: 20px; text-align: center; }
+
+.step {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px;
+  display: grid; gap: 8px; cursor: pointer; scroll-margin-top: 24px;
+}
+.step.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.step .head { display: flex; gap: 12px; align-items: baseline; }
+.step .n { font-family: var(--f-display); font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; min-width: 1.6em; }
+.note { background: var(--warn-soft); border-inline-start: 3px solid var(--warn); padding: 8px 12px; border-radius: 6px; font-size: .93rem; }
+.note b { color: var(--warn); }
+.ok { background: var(--ok-soft); border-inline-start: 3px solid var(--ok); padding: 8px 12px; border-radius: 6px; font-size: .93rem; }
+.ok b { color: var(--ok); }
+.why { color: var(--muted); font-size: .93rem; }
+.open li { margin-block: 4px; }
+footer { padding-block: 24px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; display: grid; gap: 6px; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .bench { order: -1; height: 46vh; top: env(safe-area-inset-top, 0px); z-index: 5; border-radius: 10px; }
+  .steps { padding-block: 4px 30vh; }
+  .cols3 { grid-template-columns: minmax(0, 1fr); }
+  .bench .controls { gap: 6px; bottom: 8px; }
+  .btn { font-size: .8rem; padding: 2px 9px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="kicker">مثال · صندوق إلكترونيّات صغير · كلّ قطعةٍ مرسومةٌ بالكود</div>
+  <h1>تركيب صندوق الإلكترونيّات</h1>
+  <p class="lede">من الصندوق الفارغ إلى الصندوق المغلق في ثماني خطوات. هذا مثالٌ يعرض طريقة الصفحة: القطع مرسومةٌ في <code>example/build_parts.py</code>، وكلّ رقمٍ في الخطوات مقيسٌ منها. أدِر العارض بالفأرة أو بإصبعك، وانزل في الصفحة لتنتقل بين الخطوات. وزرّ «مقطع» يقصّ البلاستيك من المنتصف فترى ما داخله.</p>
+  <div class="chips">
+    <span class="chip">2 قطعة مطبوعة</span>
+    <span class="chip">لوحة 50 × 40</span>
+    <span class="chip">4 إنسرتات M3</span>
+    <span class="chip">الغطاء إلى أعلى، وشقّ USB-C نحوك</span>
+    <span class="chip new">البرتقاليّ في العارض = ما تركّبه الآن</span>
+  </div>
+  <p class="here">إن كانت الإنسرتات في البروزات عندك الآن، فقد أنهيت الخطوة 2. <a href="#s3">ابدأ من الخطوة 3</a>.</p>
+</header>
+
+<section class="block" id="needs">
+  <h2>ما تحتاجه</h2>
+  <div class="cols3">
+    <div>
+      <h3>مطبوع</h3>
+      <ul class="plain">
+        <li>الصندوق <code>box</code></li>
+        <li>الغطاء <code>lid</code></li>
+      </ul>
+    </div>
+    <div>
+      <h3>قطع</h3>
+      <ul class="plain">
+        <li>لوحة 50 × 40 بمنفذ USB-C</li>
+        <li>4 إنسرت نحاسيّ M3، قطره 4.2 وطوله 5.7</li>
+        <li>4 براغي <code>M2.5×6</code> ذاتيّة القطع</li>
+        <li>4 براغي <code>M3×8</code> برأسٍ مسطّح</li>
+        <li>4 أرجل مطّاطيّة قطرها 10 مم</li>
+        <li>سلك USB-C للفحص</li>
+      </ul>
+    </div>
+    <div>
+      <h3>عدّة</h3>
+      <ul class="plain">
+        <li>كاوية على 240 °C للإنسرتات</li>
+        <li>مفكّ صليبيّ صغير</li>
+        <li>مفكّ أو ألن يناسب براغي M3</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>الموضع</th><th>البرغي</th><th>العدد</th><th>الخطوة</th></tr></thead>
+      <tbody>
+        <tr><td>بروزات الزوايا</td><td>إنسرت نحاسيّ M3</td><td class="num">4</td><td class="num">2</td></tr>
+        <tr><td>اللوحة على القواعد</td><td><code>M2.5×6</code> ذاتيّ القطع</td><td class="num">4</td><td class="num">4</td></tr>
+        <tr><td>الغطاء</td><td><code>M3×8</code> في الإنسرتات</td><td class="num">4</td><td class="num">6</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block" id="steps-block">
+  <h2>الخطوات</h2>
+  <div class="layout">
+    <div class="steps" id="steps">
+
+      <article class="step" id="step0" data-step="0" tabindex="0">
+        <div class="head"><span class="n">—</span><h3>الصندوق بعد التركيب</h3></div>
+        <p>من تحت إلى فوق: الأرجل، ثمّ الصندوق وفيه اللوحة على أربع قواعد، ثمّ الغطاء بأربعة براغي في إنسرتات. ومنفذ USB-C يظهر من شقٍّ في الجدار الأماميّ.</p>
+        <p class="why">في هذه الصفحة: «الأمام» جهة شقّ USB-C، و«فوق» جهة الغطاء.</p>
+      </article>
+
+      <div class="stage">الصندوق فارغاً</div>
+
+      <article class="step" id="step1" data-step="1" tabindex="0">
+        <div class="head"><span class="n">1</span><h3>الصندوق من الأمام</h3></div>
+        <p>في الجدار الأماميّ <b>شقٌّ</b> لمنفذ USB-C. وفي الزوايا الأربع <b>بروزات</b> بارتفاع الصندوق، في رأس كلٍّ منها ثقبٌ قطره 4 مم لإنسرت برغي الغطاء. وفي الأرضيّة <b>أربع قواعد</b> قصيرة تجلس عليها اللوحة.</p>
+        <p class="why">القواعد ترفع اللوحة 5 مم عن الأرضيّة، فيبقى تحت لحاماتها فراغ.</p>
+      </article>
+
+      <article class="step" id="step2" data-step="2" tabindex="0">
+        <div class="head"><span class="n">2</span><h3>الإنسرتات الأربعة</h3></div>
+        <p>الكاوية على 240 °C. ضع الإنسرت على ثقب البروز، ودعه ينزل بوزن الكاوية بلا ضغط حتّى يستوي مع رأس البروز.</p>
+        <div class="ok"><b>الفحص:</b> برغي M3 يدخل ويُشدّ، والإنسرت لا يلفّ معه.</div>
+        <p class="why">تُركَّب قبل اللوحة، فلا تقترب الكاوية من قطعها.</p>
+      </article>
+
+      <div class="stage">اللوحة</div>
+
+      <article class="step" id="step3" data-step="3" tabindex="0">
+        <div class="head"><span class="n">3</span><h3>اللوحة على القواعد</h3></div>
+        <p>أنزلها مستويةً من فوق، و<b>منفذ USB-C نحو الشقّ</b>، حتّى تجلس على القواعد الأربع.</p>
+        <div class="ok"><b>الفحص:</b> المنفذ في وسط الشقّ، وثقوب اللوحة فوق ثقوب القواعد.</div>
+        <p class="why">المنفذ يبرز 1.5 مم عن حافّة اللوحة، وبينه وبين الجدار 0.5 مم. لذلك تنزل مستويةً لا مائلة.</p>
+      </article>
+
+      <article class="step" id="step4" data-step="4" tabindex="0">
+        <div class="head"><span class="n">4</span><h3>براغي اللوحة</h3></div>
+        <p>أربعة براغي <code>M2.5×6</code> ذاتيّة القطع في القواعد. اشددها حتّى تقف اللوحة، لا أكثر.</p>
+        <div class="ok"><b>الفحص:</b> اللوحة لا تتحرّك، والمنفذ ما زال في وسط الشقّ.</div>
+      </article>
+
+      <div class="stage">الإغلاق</div>
+
+      <article class="step" id="step5" data-step="5" tabindex="0">
+        <div class="head"><span class="n">5</span><h3>الغطاء</h3></div>
+        <p>أنزله من فوق و<b>حافّته الداخليّة إلى تحت</b>، فتدخل الحافّة الصندوق ويجلس الغطاء على الجدران.</p>
+        <p class="why">الحافّة تُمركز الغطاء، وتقف قبل البروزات فلا تصطدم بها. وبينها وبين الجدار 0.2 مم.</p>
+      </article>
+
+      <article class="step" id="step6" data-step="6" tabindex="0">
+        <div class="head"><span class="n">6</span><h3>براغي الغطاء</h3></div>
+        <p>أربعة براغي <code>M3×8</code> من فوق الغطاء في الإنسرتات. اشددها متقاطعةً: زاويةٌ، ثمّ التي تقابلها.</p>
+        <div class="ok"><b>الفحص:</b> الغطاء مستوٍ على الجدران من كلّ الجهات، بلا فراغ.</div>
+        <p class="why">طول 8 مم: 2 في الغطاء و6 في البروز. فيعبر الإنسرت كلّه (5.7)، ويقف طرفه 0.3 مم تحته في الثقب الفارغ.</p>
+      </article>
+
+      <article class="step" id="step7" data-step="7" tabindex="0">
+        <div class="head"><span class="n">7</span><h3>الأرجل</h3></div>
+        <p>اقلب الصندوق، وألصق الأرجل الأربع في الزوايا، كلّاً على بعد 8 مم من الحافّتين.</p>
+        <div class="ok"><b>الفحص:</b> الصندوق لا يتأرجح على سطحٍ مستوٍ.</div>
+      </article>
+
+      <article class="step" id="step8" data-step="8" tabindex="0">
+        <div class="head"><span class="n">8</span><h3>الفحص: سلك USB-C</h3></div>
+        <p>أدخل السلك من الأمام في المنفذ، عبر الشقّ. العارض يقصّ الصندوق من المنتصف، ويُخفي البراغي والأرجل، فترى المقبس داخل المنفذ.</p>
+        <div class="ok"><b>الفحص:</b> يدخل السلك إلى آخره بلا قوّة، ولا يحتكّ بحوافّ الشقّ.</div>
+        <p class="why">حول لسان المقبس في الشقّ 2.5 مم من كلّ جانب، و1.8 من تحت، و1.9 من فوق.</p>
+      </article>
+    </div>
+
+    <div class="bench" id="bench" aria-label="عارض ثلاثيّ الأبعاد للخطوة الحالية">
+      <canvas id="view"></canvas>
+      <div class="hud" id="hud">
+        <div class="title"><span class="n" id="hudn">—</span><span id="hudt">الصندوق بعد التركيب</span></div>
+        <div class="legend"><span class="sw"></span>ما تركّبه الآن</div>
+        <div id="tags"></div>
+        <div class="controls">
+          <button class="btn" type="button" id="prev">→ السابقة</button>
+          <button class="btn" type="button" id="next">التالية ←</button>
+          <button class="btn" type="button" id="reset">إعادة الزاوية</button>
+          <button class="btn" type="button" id="cut" aria-pressed="false">مقطع</button>
+        </div>
+      </div>
+      <div class="loading" id="loading">يُحمَّل العارض…</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="order">
+  <h2>لماذا هذا الترتيب</h2>
+  <p>كلّ خطوةٍ تترك ما بعدها ممكناً: الكاوية تصل البروزات والصندوق فارغ، والمفكّ يصل براغي اللوحة من فوق قبل الغطاء، والأرجل تحت الصندوق لا يعيقها شيء. ولو رُكّبت اللوحة أوّلاً لمرّت الكاوية فوق قطعها.</p>
+</section>
+
+<section class="block" id="open">
+  <h2>ما لم يُجرَّب بعد</h2>
+  <ul class="plain open">
+    <li><b>الصندوق كلّه:</b> مثالٌ مرسومٌ بالكود ليعرض طريقة الصفحة. لم يُطبع ولم يُركَّب.</li>
+    <li><b>المقاسات</b> مختارةٌ معقولة، لا مأخوذةٌ من قطعٍ حقيقيّة: اللوحة ومنفذها والإنسرتات والبراغي.</li>
+    <li><b>ثقوب الغطاء</b> غير مرسومة في العارض، ورؤوس البراغي فوق مواضعها.</li>
+  </ul>
+</section>
+
+<footer>
+  <div>المصدر: كلّ القطع مرسومةٌ في <span class="mono">example/build_parts.py</span>، بلا CAD. الإطار: Z إلى فوق وصفره تحت أرضيّة الصندوق، و+Y نحو الأمام حيث شقّ USB-C.</div>
+  <div>في دليلٍ حقيقيّ تأتي القطع المطبوعة من ملفّ CAD بـ <span class="mono">fusion_export_meshes.py</span>، ويُرسم بالكود ما يُشترى فقط.</div>
+</footer>
+</div>
+
+<script type="application/json" id="parts">__PARTS_JSON__</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script>
+setTimeout(() => { const l = document.getElementById("loading"); if (l && !l.hidden) l.textContent = "تعذّر تشغيل العارض في هذا المتصفّح. الخطوات مكتوبة كاملة بجانبه."; }, 9000);
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const raw = JSON.parse(document.getElementById("parts").textContent);
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---- parts (box frame, mm: Z up, 0 under the floor; +Y = the front, where the USB-C slot is) ----
+const KIND = {
+  box: "print", lid: "print", inserts: "brass", board: "pcb", usb: "metal",
+  boardscrews: "metal", lidscrews: "metal", feet: "grip", cable: "cable",
+};
+const COLOUR = { print: "--part", metal: "--metal", brass: "--brass", cell: "--cell", cable: "--cable", glue: "--glue",
+  rope: "--rope", grip: "--grip", bank: "--bank", pcb: "--pcb", pcb2: "--pcb2" };
+
+const canvas = document.getElementById("view");
+const bench = document.getElementById("bench");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.localClippingEnabled = true;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1, 1, 6000);
+camera.up.set(0, 0, 1);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.12;
+controls.minDistance = 40; controls.maxDistance = 1400;
+
+const hemi = new THREE.HemisphereLight(0xffffff, 0x8a9490, 1.6); hemi.position.set(0, 0, 1); scene.add(hemi);
+const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(160, 260, 220); scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 0.55); rim.position.set(-200, -160, 80); scene.add(rim);
+const root = new THREE.Group(); scene.add(root);
+const CUT = [new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0)];          // keeps x <= 0
+
+function decode(b64, Type) {
+  const s = atob(b64), u = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i);
+  return new Type(u.buffer);
+}
+const P = {};
+for (const [id, d] of Object.entries(raw)) {
+  const q = decode(d.p, Int16Array), pos = new Float32Array(q.length);
+  for (let i = 0; i < q.length; i++) pos[i] = q[i] / 100;
+  const idx = decode(d.i, d.w === 2 ? Uint16Array : Uint32Array);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  g.setIndex(new THREE.BufferAttribute(idx, 1));
+  g.computeVertexNormals();
+  const print = KIND[id] === "print";
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.78, metalness: 0, flatShading: true, side: print ? THREE.DoubleSide : THREE.FrontSide });
+  const mesh = new THREE.Mesh(g, mat);
+  const lines = new THREE.LineSegments(new THREE.EdgesGeometry(g, 28), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.55 }));
+  const holder = new THREE.Group(); holder.add(mesh); holder.add(lines); root.add(holder);
+  P[id] = { holder, mesh, lines, cur: new THREE.Vector3(), track: null };
+}
+
+// ---- steps ----
+// show: parts on the bench; fresh: orange; rest: offset (mm) a part has in this step;
+// path: offsets a fresh part travels through before its rest; delay: 0..1 of the move; clip: cut the print at x = 0
+const BOX = ["box", "inserts"];
+const BOARD = ["board", "usb"];
+const CLOSED = [...BOX, ...BOARD, "boardscrews", "lid"];
+const ALL = Object.keys(KIND);
+const STEPS = [
+  { title: "الصندوق بعد التركيب", show: ALL, fresh: [], cam: [[0, 18, 12], [0.55, 1, 0.6], 420], tags: [] },
+  { title: "الصندوق من الأمام", show: ["box"], fresh: [], cam: [[0, 0, 12], [0.3, 1, 0.85], 300],
+    tags: [["box", [0, 30, 13], "شقّ USB-C"], ["box", [-34, 24, 30], "بروز برغي الغطاء"],
+           ["box", [21, -10, 7], "قاعدة اللوحة"], ["box", [-21, 22, 7], "قاعدة اللوحة"]] },
+  { title: "الإنسرتات الأربعة", show: ["box", "inserts"], fresh: ["inserts"], path: { inserts: [[0, 0, 35]] },
+    cam: [[0, 0, 15], [0.3, 0.75, 1], 300],
+    tags: [["inserts", [-34, 24, 30], "إنسرت M3"], ["inserts", [34, -24, 30], "إنسرت M3"]] },
+  { title: "اللوحة على القواعد", show: [...BOX, ...BOARD], fresh: BOARD, path: { board: [[0, 0, 45]], usb: [[0, 0, 45]] },
+    cam: [[0, 4, 10], [0.35, 0.9, 0.9], 290], tags: [["usb", [0, 27.5, 11.8], "USB-C نحو الشقّ"]] },
+  { title: "براغي اللوحة", show: [...BOX, ...BOARD, "boardscrews"], fresh: ["boardscrews"], path: { boardscrews: [[0, 0, 30]] },
+    cam: [[0, 4, 10], [0.2, 0.6, 1], 280], tags: [["boardscrews", [-21, 22, 10.4], "M2.5×6"], ["boardscrews", [21, -10, 10.4], "M2.5×6"]] },
+  { title: "الغطاء", show: [...BOX, ...BOARD, "boardscrews", "lid"], fresh: ["lid"], path: { lid: [[0, 0, 55]] },
+    cam: [[0, 0, 22], [0.5, 1, 0.45], 340], tags: [["lid", [0, 26.3, 27], "الحافّة الداخليّة إلى تحت"]] },
+  { title: "براغي الغطاء", show: [...CLOSED, "lidscrews"], fresh: ["lidscrews"], path: { lidscrews: [[0, 0, 35]] },
+    cam: [[0, 0, 22], [0.4, 0.8, 1], 320], tags: [["lidscrews", [34, 24, 34], "M3×8"], ["lidscrews", [-34, -24, 34], "M3×8"]] },
+  { title: "الأرجل", show: [...CLOSED, "lidscrews", "feet"], fresh: ["feet"], path: { feet: [[0, 0, -30]] },
+    cam: [[0, 0, 5], [0.45, 0.7, -1], 320], tags: [["feet", [32, 22, -2], "رجل مطّاطيّة"]] },
+  { title: "الفحص: سلك USB-C", show: ["box", "lid", ...BOARD, "cable"], fresh: ["cable"], path: { cable: [[0, 40, 0]] }, clip: true,
+    cam: [[0, 26, 10], [1, 0.55, 0.35], 220],
+    tags: [["cable", [0, 22, 11.1], "المقبس في المنفذ"]] },
+];
+
+// ---- colours from the page tokens (both themes) ----
+const COL = {};
+function readColours() {
+  for (const k of ["--bench", "--accent", "--edge", ...Object.values(COLOUR)]) COL[k] = new THREE.Color(css(k));
+  scene.background = COL["--bench"];
+  paint();
+}
+let cutOn = false;
+function paint() {
+  const st = STEPS[current];
+  for (const [id, p] of Object.entries(P)) {
+    const fresh = st && st.fresh.includes(id);
+    const k = KIND[id];
+    p.mesh.material.color.copy(fresh ? COL["--accent"] : COL[COLOUR[k]]);
+    const shiny = (k === "metal" || k === "brass") && !fresh;
+    p.mesh.material.metalness = shiny ? 0.55 : 0;
+    p.mesh.material.roughness = shiny ? 0.45 : 0.78;
+    p.lines.material.color.copy(COL["--edge"]);
+    p.lines.material.opacity = fresh ? 0.75 : 0.45;
+    const clip = cutOn && k === "print" ? CUT : [];
+    p.mesh.material.clippingPlanes = clip; p.lines.material.clippingPlanes = clip;
+  }
+}
+const cutBtn = document.getElementById("cut");
+function setCut(on) { cutOn = on; cutBtn.setAttribute("aria-pressed", on ? "true" : "false"); paint(); }
+cutBtn.addEventListener("click", () => setCut(!cutOn));
+
+// ---- camera presets ----
+const tmp = new THREE.Vector3();
+let camFrom = null, camTo = null, camT = 1;
+function presetCam(st, jump) {
+  const [t, d, dist] = st.cam;
+  const aspect = bench.clientWidth / Math.max(1, bench.clientHeight);
+  const k = aspect < 1.15 ? 1.15 / aspect : 1;
+  const target = new THREE.Vector3(...t);
+  const pos = new THREE.Vector3(...d).normalize().multiplyScalar(dist * k).add(target);
+  if (jump || reduce) { controls.target.copy(target); camera.position.copy(pos); camT = 1; controls.update(); return; }
+  camFrom = { p: camera.position.clone(), t: controls.target.clone() }; camTo = { p: pos, t: target }; camT = 0;
+}
+
+// ---- step activation and part motion ----
+let current = -1, moveT = 1, moveStart = 0;
+const DUR = 1300;
+function activate(n, opts = {}) {
+  n = Math.max(0, Math.min(STEPS.length - 1, n));
+  if (n === current && !opts.force) return;
+  const prev = current; current = n;
+  const st = STEPS[n];
+  document.querySelectorAll(".step").forEach((el) => el.classList.toggle("active", +el.dataset.step === n));
+  document.getElementById("hudn").textContent = n === 0 ? "—" : n;
+  document.getElementById("hudt").textContent = st.title;
+  const forward = n > prev;
+  for (const [id, p] of Object.entries(P)) {
+    const show = st.show.includes(id);
+    const wasShown = p.holder.visible && prev !== -1;
+    p.holder.visible = show;
+    if (!show) { p.track = null; continue; }
+    const rest = new THREE.Vector3(...((st.rest && st.rest[id]) || [0, 0, 0]));
+    const path = (st.path && st.path[id]) || null;
+    let keys;
+    if (path && (forward || !wasShown) && !reduce) keys = [...path.map((v) => new THREE.Vector3(...v)), rest];
+    else if (!wasShown || reduce) keys = [rest];
+    else keys = [p.cur.clone(), rest];
+    if (keys.length === 1) { p.cur.copy(keys[0]); p.holder.position.copy(p.cur); p.track = null; }
+    else p.track = { keys, delay: (st.delay && st.delay[id]) || 0 };
+  }
+  moveStart = performance.now(); moveT = reduce ? 1 : 0;
+  setCut(!!st.clip);
+  buildTags(st); presetCam(st, prev === -1);
+}
+
+const ease = (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+function step(now) {
+  if (moveT < 1) {
+    moveT = Math.min(1, (now - moveStart) / DUR);
+    for (const p of Object.values(P)) {
+      if (!p.track) continue;
+      const { keys, delay } = p.track;
+      let u = delay >= 1 ? 1 : Math.max(0, Math.min(1, (moveT - delay) / (1 - delay)));
+      u = ease(u);
+      const segs = keys.length - 1, x = u * segs, i = Math.min(segs - 1, Math.floor(x));
+      p.cur.lerpVectors(keys[i], keys[i + 1], x - i);
+      p.holder.position.copy(p.cur);
+      if (moveT === 1) p.track = null;
+    }
+  }
+  if (camT < 1) {
+    camT = Math.min(1, camT + 1 / 50);
+    const e = ease(camT);
+    camera.position.lerpVectors(camFrom.p, camTo.p, e);
+    controls.target.lerpVectors(camFrom.t, camTo.t, e);
+  }
+  controls.update();
+  renderer.render(scene, camera);
+  placeTags();
+  requestAnimationFrame(step);
+}
+
+// ---- labels projected from part points ----
+const tagsEl = document.getElementById("tags");
+let tags = [];
+function buildTags(st) {
+  tagsEl.textContent = ""; tags = [];
+  for (const [id, pt, text] of st.tags || []) {
+    const el = document.createElement("div"); el.className = "tag"; el.textContent = text;
+    tagsEl.appendChild(el); tags.push({ el, id, pt: new THREE.Vector3(...pt) });
+  }
+}
+function placeTags() {
+  const w = bench.clientWidth, h = bench.clientHeight;
+  for (const t of tags) {
+    const p = P[t.id];
+    tmp.copy(t.pt); p.holder.localToWorld(tmp);
+    const hidden = cutOn && KIND[t.id] === "print" && t.pt.x > 0.5;
+    tmp.project(camera);
+    const vis = tmp.z < 1 && p.holder.visible && !hidden;
+    t.el.style.display = vis ? "" : "none";
+    t.el.style.left = ((tmp.x + 1) / 2) * w + "px";
+    t.el.style.top = ((1 - tmp.y) / 2) * h + "px";
+  }
+}
+
+// ---- sizing, theme, scroll sync ----
+function resize() {
+  const w = bench.clientWidth, h = bench.clientHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(bench);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readColours);
+new MutationObserver(readColours).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+const cards = [...document.querySelectorAll(".step")];
+const narrow = () => matchMedia("(max-width: 900px)").matches;
+let io, lock = 0;
+function observe() {
+  if (io) io.disconnect();
+  io = new IntersectionObserver((entries) => {
+    if (performance.now() < lock) return;
+    for (const e of entries) if (e.isIntersecting) activate(+e.target.dataset.step);
+  }, { rootMargin: narrow() ? "-58% 0px -30% 0px" : "-42% 0px -52% 0px" });
+  cards.forEach((c) => io.observe(c));
+}
+observe(); matchMedia("(max-width: 900px)").addEventListener("change", observe);
+cards.forEach((c) => {
+  c.addEventListener("click", (e) => { if (!e.target.closest("a")) activate(+c.dataset.step); });
+  c.addEventListener("keydown", (e) => { if (e.key === "Enter") activate(+c.dataset.step); });
+});
+function go(n, instant) {
+  n = Math.max(0, Math.min(STEPS.length - 1, n));
+  activate(n);
+  lock = performance.now() + 1400;
+  const card = document.getElementById("step" + n);
+  const r = card.getBoundingClientRect();
+  const off = narrow() ? innerHeight * 0.56 : innerHeight * 0.4;
+  scrollTo({ top: scrollY + r.top - off, behavior: reduce || instant ? "auto" : "smooth" });
+}
+document.getElementById("prev").addEventListener("click", () => go(current - 1));
+document.getElementById("next").addEventListener("click", () => go(current + 1));
+document.getElementById("reset").addEventListener("click", () => presetCam(STEPS[current], false));
+document.querySelectorAll('a[href^="#s"]').forEach((a) => a.addEventListener("click", (e) => {
+  const m = /^#s(\d+)$/.exec(a.getAttribute("href")); if (m) { e.preventDefault(); go(+m[1]); }
+}));
+
+resize();
+readColours();
+const start = /^#s(\d+)$/.exec(location.hash);
+activate(start ? +start[1] : 0);
+if (start) document.fonts.ready.then(() => setTimeout(() => go(+start[1], true), 60));
+document.getElementById("loading").hidden = true;
+requestAnimationFrame(step);
+</script>

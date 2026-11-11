@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.vscode/
+# build_html.py also writes the artifact page (no doctype); only standalone.html is kept
+example/example-box.html
